@@ -1,0 +1,21 @@
+.authentication-container {
+  display: flex;
+  width: 900px;
+  justify-content: space-between;
+  margin: 30px auto;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.click-here {
+  color: blue !important;
+  font-size: larger;
+  text-decoration: underline !important;
+  cursor: pointer;
+}
