@@ -3,6 +3,7 @@ import { createContext, useReducer, useEffect } from "react";
 export const RecoveryContext = createContext({
     setPage: () => { },
     setOtp: () => { },
+    setObb: () => { },
     setEmail: () => { },
     recoveryState: {}
 })
@@ -10,12 +11,14 @@ export const RecoveryContext = createContext({
 const INITIAL_STATE = {
     page: 'signIn',
     otp: 0,
-    email: '',
+    obb: '',
+    email: ''
 }
 const types = {
     setPage: 'setPage',
     setOtp: 'setOtp',
-    setEmail: 'setEmail',
+    setObb: 'setObb',
+    setEmail: 'setEmail'
 }
 const reducer = (state, action) => {
     const { type, payload } = action
@@ -25,6 +28,8 @@ const reducer = (state, action) => {
             return { ...state, page: payload }
         case types.setOtp:
             return { ...state, otp: payload }
+        case types.setObb:
+            return { ...state, obb: payload }
         case types.setEmail:
             return { ...state, email: payload }
         default:
@@ -42,6 +47,9 @@ export const RecoveryProvider = ({ children }) => {
     const setOtp = (otp) => {
         dispatch({ type: types.setOtp, payload: otp })
     }
+    const setObb = (obb) => {
+        dispatch({ type: types.setObb, payload: obb })
+    }
     const setEmail = (e) => {
         dispatch({ type: types.setEmail, payload: e.target.value })
     }
@@ -49,6 +57,7 @@ export const RecoveryProvider = ({ children }) => {
     const value = {
         setPage,
         setOtp,
+        setObb,
         setEmail,
         recoveryState: recoveryState
     }

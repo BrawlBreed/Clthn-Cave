@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import FormInput from '../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
@@ -27,6 +28,7 @@ const SignInForm = () => {
   const [errors, setErrors] = useState(defaultErrors)
   const { displayNameEmail, password } = formFields;
   const [msg, setMsg] = useState('');
+  const navigate = useNavigate()
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
@@ -40,6 +42,7 @@ const SignInForm = () => {
 
     if (err.displayNameEmail === '') {
       const res = await signIn(userData)
+      console.log(res)
 
       if (res.success === "No") {
         if (res.error === 'auth/wrong-password') {
@@ -56,6 +59,7 @@ const SignInForm = () => {
         const Msg = { msg: 'Success!', success: 'Yes' };
         setMsg(Object.values(Msg))
         setTimeout(() => {
+          navigate('/')
           setMsg('')
         }, 3001)
       }
@@ -69,7 +73,6 @@ const SignInForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     signUserIn(formFields)
 
   };

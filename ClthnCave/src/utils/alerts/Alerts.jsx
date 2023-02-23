@@ -21,7 +21,6 @@ export const Alerts = ({ success, msg }) => {
       showConfirmButton: false,
       timer: 2500
     })
-    redirect('/')
   }
   else if (active && success === 'No') {
     Swal.fire({

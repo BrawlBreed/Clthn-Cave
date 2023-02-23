@@ -8,7 +8,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updatePassword
+  sendPasswordResetEmail,
+  updatePassword,
+  verifyPasswordResetCode,
+  confirmPasswordReset
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -183,13 +186,42 @@ export const addUser = async (userData) => {
   }
 }
 
-export const setNewPassword = async (auth, newPassword) => {
-  const user = auth.currentUser;
+export const setNewPassword = async (auth, obbCode, newPassword) => {
+  try{
+    const response = await confirmPasswordReset(auth, obbCode, newPassword)
+    console.log(response)
 
-  await updatePassword(user, newPassword).then(() => {
-    return {message: 'New password set successfully!', success:true}
-  }).catch((error) => {
-    return {message: error, success:false}
-  });
+    return true
+  }catch(err){
+    console.log(err)
+    return false
+  }
+    
+}
+
+export const sendConfirmationEmail = async (email) => {
+  // const actionCodeSettings = {
+  //   url: code, // URL of the page where the user will enter the confirmation code
+  //   handleCodeInApp: true, // Open the link in the app instead of in a web browser
+  // };
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return true;
+  } catch (err) {
+    console.log(err)
+    return false;
+  }
+}
+  
+export const verifyEmailCode = async (obbCode) => {
+
+  try{
+    const response = await verifyPasswordResetCode(auth, obbCode)
+    return true
+  }catch(err){
+    console.log(err)
+    return false
+  }
 
 }

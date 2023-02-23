@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { RecoveryContext } from '../../contexts/recovery.context'
 import FormInput from '../form-input/form-input.component'
 import Button from '../button/button.component'
-import { setNewPassword, auth } from '../../utils/firebase/firebase.utils'
+import { setNewPassword, auth, sendConfirmationEmail } from '../../utils/firebase/firebase.utils'
 import { validatePassword } from '../../utils/validation/validation'
+import { Alerts } from '../../utils/alerts/Alerts'
 import './forgot-password-form.styles.scss'
 
 
@@ -14,18 +16,31 @@ const INITIAL_STATE2 =
     { password: '', confirmPassword: '' }
 export const ForgotPassword = () => {
     const { setPage, setOtp, setEmail, recoveryState } = useContext(RecoveryContext)
-    const { page, otp, email } = recoveryState
+    const { page, otp, obb, email } = recoveryState
     const [OTPinput, setOTPinput] = useState(INITIAL_STATE1)
     const [timerCount, setTimer] = useState(0);
     const [disable, setDisable] = useState(true);
-    const [codeError, setCodeError] = useState('')
-    const [formFields, setFormFields] = useState(INITIAL_STATE2)
-    const [errors, setErrors] = useState(INITIAL_STATE2)
+    const [codeError, setCodeError] = useState('');
+    const [formFields, setFormFields] = useState(INITIAL_STATE2);
+    const [errors, setErrors] = useState(INITIAL_STATE2);
+    const [msg, setMsg] = useState(false)
+    const [emailNotification, setEmailNotification] = useState('')
+    const location = useLocation()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        // const OTP = Math.floor((Math.random() * 9000 + 1000))
+        // setOtp(OTP)
+        setTimer(60)
+        setDisable(true)
 
-        navigateToOTP()
+        const response = await sendConfirmationEmail(email)
+
+        if (response) {
+            setDisable(true)
+            setEmailNotification('Verification email sent!')
+        }
+        // navigateToOTP()
     }
 
     const handleChange = (e) => {
@@ -84,8 +99,19 @@ export const ForgotPassword = () => {
         const valid = Object.values(errors).filter((err) => err !== '')
         if (valid.length === 0) {
             const { password } = formFields
-            const response = await setNewPassword(auth, password)
-            console.log(response.message)
+            const response = await setNewPassword(auth, obb, password)
+            if (response) {
+                const Msg = { msg: 'Success!', success: 'Yes' };
+                setMsg(Object.values(Msg))
+                window.history.replaceState(null, '', location.pathname);
+
+                setTimeout(() => {
+                    setMsg('')
+                    window.location.reload();
+                }, 3005)
+            }
+
+            location.search = ''
         }
     }
 
@@ -95,7 +121,11 @@ export const ForgotPassword = () => {
                 <div className='forgot-password-container'>
                     <h2>Forgot your password?</h2>
                     <h4>Type in your email</h4>
-                    <form onSubmit={(e) => handleSubmit(e)}>
+                    <form onSubmit={(e) => {
+                        if (disable === false) {
+                            handleSubmit(e)
+                        }
+                    }}>
                         <FormInput
                             label='Email'
                             type='email'
@@ -104,9 +134,21 @@ export const ForgotPassword = () => {
                             name='email'
                             value={email}
                         />
-                        <Button id='btn'>
+                        <Button id='btn' onSubmit={(e) => {
+                            if (disable === false) {
+                                handleSubmit(e)
+                            }
+                        }}>
                             Submit
                         </Button>
+                        {emailNotification && (
+                            <>
+                                <p style={{ color: 'lightgreen' }}>{emailNotification}</p>
+                                <p>Did't recieve code? {disable ? <span>Resend in {timerCount}</span> : <span style={{ cursor: 'pointer', color: 'blue' }} onClick={(e) => handleSubmit(e)}>Resend now</span>}
+                                </p>
+                            </>
+                        )}
+
                     </form>
                 </div>
             )}
@@ -186,6 +228,7 @@ export const ForgotPassword = () => {
             )}
             {page === 'changePassword' && (
                 <div className='forgot-password-container'>
+                    {msg && <Alerts success={msg[1]} msg={msg[0]} />}
                     <h2>Forgot your password?</h2>
                     <h4>Type in your new password!</h4>
                     <form onSubmit={(e) => handleQuery(e)}>
@@ -208,7 +251,7 @@ export const ForgotPassword = () => {
                             value={formFields.confirmPassword}
                             error={errors.confirmPassword}
                         />
-                        <Button id='btn' type='submit'>Sign Up</Button>
+                        <Button id='btn' type='submit'>Submit</Button>
                     </form>
                 </div>
             )}
