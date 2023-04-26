@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=3 uid="uid://bal4ty7ibhthd"]
+
+[ext_resource type="PackedScene" uid="uid://dfgqgefbfdfot" path="res://Source/Object/Fighter/Fighter.tscn" id="1_t2c70"]
+[ext_resource type="Shader" path="res://Assets/Shader/FillTexture.gdshader" id="2_28okp"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Knight/Knight.gd" id="2_ciqw8"]
+[ext_resource type="Texture2D" uid="uid://dmu8j8w4pl2dh" path="res://Assets/Object/Pieces/Knight.png" id="2_qy57x"]
+[ext_resource type="PackedScene" uid="uid://ccxs8qcj4upi2" path="res://Source/Object/Fighter/Knight/Weapon.tscn" id="3_v0jy4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_03fdn"]
+resource_local_to_scene = true
+shader = ExtResource("2_28okp")
+shader_parameter/fill_percent = null
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/alpha = 1.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fopgc"]
+radius = 7.0
+height = 28.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4xnxr"]
+radius = 4.0
+height = 18.0
+
+[node name="Fighter" instance=ExtResource("1_t2c70")]
+script = ExtResource("2_ciqw8")
+start_max_health = 6
+movement_speed = 192.0
+
+[node name="AnimationBody" parent="." index="0"]
+material = SubResource("ShaderMaterial_03fdn")
+
+[node name="Main" parent="AnimationBody" index="0"]
+texture = ExtResource("2_qy57x")
+offset = Vector2(0, -16)
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(0, -14)
+shape = SubResource("CapsuleShape2D_fopgc")
+debug_color = Color(0.243137, 0.627451, 0.294118, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+position = Vector2(0, -4)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_4xnxr")
+
+[node name="WeaponPivot" parent="." index="3"]
+position = Vector2(0, -13)
+
+[node name="Weapon" parent="WeaponPivot" index="0" instance=ExtResource("3_v0jy4")]

@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmpyncr8xb1p6"]
+
+[ext_resource type="Script" path="res://Source/Object/Board/GameManager.cs" id="1_efll1"]
+[ext_resource type="Script" path="res://Source/Object/Board/BoardUI.cs" id="2_54b86"]
+[ext_resource type="Resource" uid="uid://cuceq2ybc284c" path="res://Source/Object/Board/Themes/Default.tres" id="3_bw4il"]
+[ext_resource type="Texture2D" uid="uid://bdtjurpoq8eux" path="res://Assets/Object/World/MoveSquare.png" id="4_53aqt"]
+[ext_resource type="Texture2D" uid="uid://c6rnd5oue7i65" path="res://Assets/Object/World/Board.png" id="4_v4yy5"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_efll1")
+
+[node name="BoardUI" type="Node2D" parent="."]
+position = Vector2(152, 8)
+script = ExtResource("2_54b86")
+pieceTheme = ExtResource("3_bw4il")
+squareTexture = ExtResource("4_53aqt")
+boardScale = 1.75
+
+[node name="BoardSprite" type="Sprite2D" parent="BoardUI"]
+scale = Vector2(1.75, 1.75)
+texture = ExtResource("4_v4yy5")
+centered = false
+
+[node name="Pieces" type="Node2D" parent="BoardUI"]
+
+[node name="MoveSound" type="AudioStreamPlayer" parent="."]
+
+[node name="CaptureSound" type="AudioStreamPlayer" parent="."]

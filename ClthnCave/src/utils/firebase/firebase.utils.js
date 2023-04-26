@@ -11,7 +11,7 @@ import {
   sendPasswordResetEmail,
   updatePassword,
   verifyPasswordResetCode,
-  confirmPasswordReset
+  confirmPasswordReset,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -22,17 +22,17 @@ import {
   writeBatch,
   query,
   getDocs,
-  where
+  where,
+  setDocs,
+  updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
-
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyDDU4V-_QV3M8GyhC9SVieRTDM4dbiT0Yk',
-//   authDomain: 'crwn-clothing-db-98d4d.firebaseapp.com',
-//   projectId: 'crwn-clothing-db-98d4d',
-//   storageBucket: 'crwn-clothing-db-98d4d.appspot.com',
-//   messagingSenderId: '626766232035',
-//   appId: '1:626766232035:web:506621582dab103a4d08d6',
-// };
+import {   
+  getStorage, 
+  ref,
+  uploadBytesResumable,
+  getDownloadURL 
+} from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBXls94WXILbEobFYaiJ6SpZDZGOI7M_3k",
@@ -43,6 +43,7 @@ const firebaseConfig = {
   appId: "1:108559415787:web:c9be9301d8961800ccc1ae",
   measurementId: "G-J512G06HFD"
 };
+
 const firebaseApp = initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
@@ -74,21 +75,108 @@ export const addCollectionAndDocuments = async (
 
   await batch.commit();
 };
+export const updateProducts = async (categoryId, products) => {
+  try{
+    const docRef = doc(db, `categories/`, categoryId)
+    await getDoc(docRef)
+    .then((data) => data.data())
+    .then((obj) => setDoc(docRef, {...obj, items: products}))    
 
-export const getCategoriesAndDocuments = async () => {
-  const collectionRef = collection(db, 'categories');
-  const q = query(collectionRef);
+    return true
+  }catch(err){
+    console.log(err)
 
-  const querySnapshot = await getDocs(q);
-  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-    const { title, items } = docSnapshot.data();
-    
-    return {...acc, [title]: items};
-  }, {});
+    return  false
+  }
+}
+export const updateCategory = async (categoryId, categoryData) => {
+  const { title, imageUrl } = categoryData
+  try{
+    const docRef = doc(db, `categories/`, categoryId)
+    const newDocRef = doc(db, `categories/`, categoryData.title)
+    const exists = await getDoc(newDocRef)
+    .then((data) => {
+      if(data.exists()){
+        return data.data()
+      }else{
+        return data.data()
+      }
+    })
+
+    if(exists){
+      await setDoc(newDocRef, {...exists, imageUrl: imageUrl, title: title})
+    }else{
+      await getDoc(docRef)
+      .then((data) => data.data())
+      .then((obj) => setDoc(newDocRef, {...obj, imageUrl: imageUrl, title: title}))
+      .then(() => deleteDoc(docRef))
+    }
+    return true
+  }catch(err){
+    console.log(err)
+
+    return false
+  }
+}
+export const addCategoryDocument = async (col, title, docData = 0) => {
+  const { categoryImage } = docData;
+  try{
+    const categoryRef = doc(db, 'categories', col)
+    const categorySnapshot = getDoc(categoryRef)
+    const exists = (await categorySnapshot).exists()
+
+    if(exists){
+      const docRef = doc(db, `categories/${col}`)
+      try{
+        await getDoc(docRef)
+        .then((data) => data.data())
+        .then((obj) => setDoc(docRef, {...obj, items:[...obj.items, docData]}))
+         
+        return true
+      }catch(err){
+        console.log(err)
+
+        return true
+      }
+    }else{
+      try{
+        const colRef = doc(db, 'categories', col)
+        const data = {
+          title: col,
+          imageUrl: categoryImage,
+          items: [
+            docData
+          ]
+        }
+        await setDoc(colRef, data)
+
+        return true
+      }catch(err){
+        console.log(err)
+
+        return false
+      }
+    }
   
-  return categoryMap;
-};
+  }catch(error){
+    console.log(`Error: ${error}`)
 
+    return false
+  }
+
+}
+export const deleteCategories = async (categoryId) => {
+    try{
+      const categoryRef = doc(db, `categories/${categoryId}`)
+      await deleteDoc(categoryRef)
+
+      return true
+    }catch(err){
+      console.log(err)
+
+      return false
+    }
+}
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInformation = {}
@@ -145,7 +233,6 @@ export const conditionDataQuery = async (col, field, operator, fieldValue) => {
     return querySnapshot.docs.map((doc) => (
       {...doc.data()}
     ))
-      // return data.docs.map((doc) => ({...doc.data(), id:doc.id}))
   }
   catch(e){
     console.log(e)
@@ -224,4 +311,125 @@ export const verifyEmailCode = async (obbCode) => {
     return false
   }
 
+}
+
+export const handleUpload = async (images) => {
+  const storage = getStorage()
+  const metadata = {
+    contentType: 'image/jpeg'
+  };  
+  const urls = []
+  console.log(images)
+
+  Object.values(images).forEach((image) => {
+    const storageRef = ref(storage, `images/${image.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, image, metadata)
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      }, 
+      (error) => {
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
+            break;
+          case 'storage/canceled':
+            // User canceled the upload
+            break;
+    
+          // ...
+    
+          case 'storage/unknown':
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+        }
+      }, 
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          urls.push(downloadURL)
+        });
+      }
+    );
+      
+  });
+
+  return urls
+}
+export const placeOrder = async (orderData) => {
+  const { name, phone, country } = orderData
+  try{
+    const docRef = doc(db, 'orders', name)
+    await setDoc(docRef, {...orderData, from: new Date(), phone: `+${country}${phone}` })
+
+    return true
+  }catch(err){
+    console.log(err)
+
+    return false
+  }
+
+}
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories');
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = await Promise.all(querySnapshot.docs.map(async (item) => {
+    const categoryRef = doc(db, `categories`, item.id)
+    const category = await getDoc(categoryRef)
+    const data = category.data()
+    const { title, imageUrl, items } = data
+
+    return {category: {title: title, imageUrl: imageUrl }, products: items }
+  }))
+
+  return categoryMap;
+};
+
+
+export const getOrders = async () => {
+  const ordersRef = collection(db, 'orders')
+  const q = query(ordersRef);
+
+  try{
+    const querySnapshot = await getDocs(q)
+    const categoryMap = await Promise.all(querySnapshot.docs.map(async (item) => {
+      const categoryRef = doc(db, `orders`, item.id)
+      const category = await getDoc(categoryRef)
+      const data = category.data()
+
+      return data
+    }))
+    return categoryMap 
+  }catch(err){
+    console.log(err)
+
+    return false
+  }
+}
+
+export const deleteOrder = async (orderId) => {
+  try{
+    const orderRef = doc(db, `orders`, orderId)
+    await deleteDoc(orderRef)
+
+    return true
+  }catch(err){
+    console.log(err)
+
+    return false
+  }
 }

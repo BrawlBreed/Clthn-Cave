@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" uid="uid://broemaauc26lm" path="res://Source/Object/Fighter/Weapon/Weapon.tscn" id="1_5agcy"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Rook/Weapon.gd" id="2_j4l2w"]
+[ext_resource type="Script" path="res://Source/System/Resource/Hitbox.gd" id="3_42xb4"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w7b1b"]
+radius = 4.0
+height = 26.0
+
+[node name="Weapon" instance=ExtResource("1_5agcy")]
+script = ExtResource("2_j4l2w")
+
+[node name="Body" type="Polygon2D" parent="AnimationBody" index="1"]
+polygon = PackedVector2Array(-3, -3, -2, -2, -2, -1, 2, -1, 2, -3, 3, -4, 25, -4, 26, -3, 26, 3, 25, 4, 3, 4, 2, 3, 2, 1, -2, 1, -2, 2, -3, 3, -6, 3, -7, 2, -7, -2, -6, -3)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/Body" index="0"]
+show_behind_parent = true
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-3, -4, -1, -2, 1, -2, 1, -3, 3, -5, 25, -5, 27, -3, 27, 3, 25, 5, 3, 5, 1, 3, 1, 2, -1, 2, -3, 4, -6, 4, -8, 2, -8, -2, -6, -4)
+
+[node name="ShootingBody" type="Polygon2D" parent="AnimationBody" index="2"]
+polygon = PackedVector2Array(22, -4, 28, -6, 29, -5, 29, 6, 28, 7, 22, 4)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/ShootingBody" index="0"]
+show_behind_parent = true
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(22, -5, 22, 5, 28, 8, 30, 6, 30, -5, 28, -7)
+
+[node name="Hitbox" type="Area2D" parent="AnimationBody" index="3"]
+visible = false
+script = ExtResource("3_42xb4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimationBody/Hitbox" index="0"]
+position = Vector2(13, 0)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_w7b1b")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[node name="BulletHolder" type="Marker2D" parent="AnimationBody" index="4"]
+position = Vector2(49, 0)
+
+[connection signal="main_attack_used" from="." to="." method="on_main_attack_used"]
+[connection signal="other_attack_used" from="." to="." method="on_other_attack_used"]

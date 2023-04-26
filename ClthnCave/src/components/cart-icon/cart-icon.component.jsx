@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { ReactComponent as ShoppingIcon } from '../../assets/shopping-bag.svg';
+import { IoBagOutline } from 'react-icons/io5';
 
 import { CartContext } from '../../contexts/cart.context';
 
@@ -14,7 +14,7 @@ const CartIcon = () => {
 
   return (
     <div className='cart-icon-container' onClick={toggleIsCartOpen}>
-      <ShoppingIcon className='shopping-icon' />
+      <IoBagOutline className='shopping-icon' />
       <a className='item-count'>{cartCount}</a>
     </div>
   );

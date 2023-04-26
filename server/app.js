@@ -28,8 +28,8 @@ function sendEmail({ recipient_email, OTP }) {
     var transporter = nodemailer.createTransport({
       service : 'hotmail',
       auth : {
-        user : 'clthncave@outlook.com',
-        pass : 'Gunz&Granadez187'
+        user : process.env.MY_EMAIL,
+        pass : process.env.MY_PASSWORD
       }
       // Tried very hard to do it with gmail but unfortunately :(
       // service: 'gmail'

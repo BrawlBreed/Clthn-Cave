@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqomj2xvd8h5o"]
+
+[ext_resource type="Script" path="res://Source/Object/Actor/Actor.gd" id="1_6n1mu"]
+
+[node name="Actor" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_6n1mu")
+
+[node name="AnimationBody" type="Node2D" parent="."]
+
+[node name="Main" type="Sprite2D" parent="AnimationBody"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

@@ -6,15 +6,16 @@ const DirectoryItem = ({ category }) => {
   const navigate = useNavigate()
 
   return (
-    <div className='directory-item-container'>
+    <div className='directory-item-container'
+      onClick={() => {
+        navigate(`/shop/${title.charAt(0).toUpperCase() + title.slice(1)}`)
+      }}
+    >
       <div
         className='background-image'
         style={{
           backgroundImage: `url(${imageUrl})`,
           transition: '2s'
-        }}
-        onClick={() => {
-          navigate(`/shop/${title.charAt(0).toUpperCase() + title.slice(1)}`)
         }}
       />
       <div className='body'>

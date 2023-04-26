@@ -1,0 +1,49 @@
+[gd_scene load_steps=9 format=3 uid="uid://vluyhjh7dbct"]
+
+[ext_resource type="PackedScene" uid="uid://dfgqgefbfdfot" path="res://Source/Object/Fighter/Fighter.tscn" id="1_twb1t"]
+[ext_resource type="Texture2D" uid="uid://b6erflk0lhs33" path="res://Assets/Object/Pieces/Bishop.png" id="2_dn78i"]
+[ext_resource type="Shader" path="res://Assets/Shader/FillTexture.gdshader" id="2_ruxkb"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Bishop/Bishop.gd" id="2_vvtii"]
+[ext_resource type="PackedScene" uid="uid://dibljaqj0oy8c" path="res://Source/Object/Fighter/Bishop/Weapon.tscn" id="3_xl1m0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rb3ra"]
+resource_local_to_scene = true
+shader = ExtResource("2_ruxkb")
+shader_parameter/fill_percent = null
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/alpha = 1.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jgmue"]
+radius = 6.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4xnxr"]
+radius = 4.0
+height = 18.0
+
+[node name="Fighter" instance=ExtResource("1_twb1t")]
+script = ExtResource("2_vvtii")
+start_max_health = 5
+movement_speed = 110.0
+
+[node name="AnimationBody" parent="." index="0"]
+material = SubResource("ShaderMaterial_rb3ra")
+
+[node name="Main" parent="AnimationBody" index="0"]
+texture = ExtResource("2_dn78i")
+offset = Vector2(0, -16)
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(0, -15)
+shape = SubResource("CapsuleShape2D_jgmue")
+debug_color = Color(0.243137, 0.627451, 0.294118, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+position = Vector2(0, -4)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_4xnxr")
+
+[node name="WeaponPivot" parent="." index="3"]
+position = Vector2(0, -14)
+
+[node name="Weapon" parent="WeaponPivot" index="0" instance=ExtResource("3_xl1m0")]

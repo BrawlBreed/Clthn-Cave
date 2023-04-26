@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
+import { CategoriesContext } from '../../contexts/categories.context'
 import { SidebarContext } from '../../contexts/sidebar.context'
 import { Modal } from './modal.component'
 import './sidebar.styles.scss'
@@ -6,20 +7,33 @@ import { BiSearchAlt } from 'react-icons/bi'
 import { AiOutlineCloseSquare } from 'react-icons/ai'
 import { GoThreeBars } from 'react-icons/go'
 import { MdOutlineExpandMore, MdExpandLess } from 'react-icons/md'
-// import { ReactComponent as ClthnLogo } from '../../assets/clthncave.svg';
 import AOS from 'aos'
 import 'aos/dist/aos.css';
+import { useNavigate } from 'react-router-dom'
 
 
 const Sidebar = () => {
     const { setIsSidebarOpen, sidebarState, onChangeHandler } = useContext(SidebarContext)
-    const [modal, setModal] = useState({ name: '' })
+    const [modal, setModal] = useState({ title: '' })
+    const { categoriesMap } = useContext(CategoriesContext)
+    const navigate = useNavigate()
 
     const { searchBox, isSidebarOpen, filteredItems, loading } = sidebarState
 
     const modalSetter = (item) => {
-        const { id, name, imageUrl } = item
-        setModal({ id: id, name: name, imageUrl: imageUrl })
+        const { title, imageUrls } = item
+        setModal({ title: title, imageUrl: imageUrls })
+    }
+
+    const handleKeyDown = (e, data) => {
+        if (e.key === 'Enter') {
+            console.log(data)
+            navigate('/shop/search', { state: data })
+        }
+    }
+
+    const handleClick = (data) => {
+        navigate('/shop/search', { state: data })
     }
 
     useEffect(() => {
@@ -40,42 +54,61 @@ const Sidebar = () => {
                         </div>
                         <h2>Search</h2>
                         <div className='column'>
-                            <BiSearchAlt id='search-icon' />
+                            <BiSearchAlt onClick={() => {
+                                handleClick(filteredItems)
+                            }} style={{ cursor: 'pointer' }} id='search-icon' />
                             <input
                                 id='searchbox'
                                 onChange={(e) => { onChangeHandler(e) }}
+                                onKeyDown={(e) => {
+                                    handleKeyDown(e, filteredItems)
+                                }}
                             />
                         </div>
                         {loading ? (
                             <div className='categories'>
-                                {Object.values(filteredItems).flat().filter((_, idx) => idx < 5).map((item) => {
+                                {searchBox ? filteredItems.map((item, idx) => {
                                     return (
-                                        <div key={item.id}>
-                                            <p>{item.name}</p>
-                                            {modal.name === item.name ?
+                                        <div className='category' key={idx}>
+                                            {modal.title === item.title ?
                                                 <>
                                                     <Modal item={item} />
                                                     <MdExpandLess
                                                         onClick={() => {
-                                                            modalSetter({ name: '' })
+                                                            modalSetter({ title: '', imageUrl: '' })
                                                         }}
                                                         className='expand-icon'
                                                     />
                                                 </>
                                                 :
-                                                <MdOutlineExpandMore
-                                                    onClick={() => {
-                                                        modalSetter(item)
-                                                    }}
-                                                    className='expand-icon'
-                                                />
+                                                <>
+                                                    <h3>{item.title}</h3>
+                                                    <MdOutlineExpandMore
+                                                        onClick={() => {
+                                                            modalSetter(item)
+                                                        }}
+                                                        className='expand-icon'
+                                                    />
+                                                </>
                                             }
                                         </div>
                                     )
-                                })}
+                                }) :
+                                    <div className='category'>
+                                        {categoriesMap.length ? categoriesMap.map((item) => {
+                                            return (
+                                                <div>
+                                                    <h3 onClick={() => navigate(`/shop/${item.category.title}`)}>
+                                                        {item.category.title}
+                                                    </h3>
+                                                </div>
+                                            )
+                                        }) : <></>}
+                                    </div>}
                             </div>
 
-                        ) : <p>Loading...</p>}
+                        ) : <></>
+                        }
                     </div>
                 </div>
             </div>

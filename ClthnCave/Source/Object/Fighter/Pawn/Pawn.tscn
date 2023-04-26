@@ -1,0 +1,48 @@
+[gd_scene load_steps=9 format=3 uid="uid://3ekyj5ohkbl"]
+
+[ext_resource type="PackedScene" uid="uid://dfgqgefbfdfot" path="res://Source/Object/Fighter/Fighter.tscn" id="1_2ya3y"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Pawn/Pawn.gd" id="2_nj5ap"]
+[ext_resource type="Shader" path="res://Assets/Shader/FillTexture.gdshader" id="2_thij8"]
+[ext_resource type="Texture2D" uid="uid://ctuphjlu5dy2s" path="res://Assets/Object/Pieces/Pawn.png" id="2_u5t1x"]
+[ext_resource type="PackedScene" uid="uid://d2rbjtmn0lwfe" path="res://Source/Object/Fighter/Pawn/Weapon.tscn" id="3_7uryo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_legn0"]
+resource_local_to_scene = true
+shader = ExtResource("2_thij8")
+shader_parameter/fill_percent = null
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/alpha = 1.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4u3r8"]
+radius = 6.0
+height = 26.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4xnxr"]
+radius = 4.0
+height = 18.0
+
+[node name="Fighter" instance=ExtResource("1_2ya3y")]
+script = ExtResource("2_nj5ap")
+
+[node name="AnimationBody" parent="." index="0"]
+material = SubResource("ShaderMaterial_legn0")
+
+[node name="Main" parent="AnimationBody" index="0"]
+texture = ExtResource("2_u5t1x")
+offset = Vector2(0, -16)
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(0, -13)
+shape = SubResource("CapsuleShape2D_4u3r8")
+debug_color = Color(0.243137, 0.627451, 0.294118, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+position = Vector2(0, -4)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_4xnxr")
+
+[node name="WeaponPivot" parent="." index="3"]
+position = Vector2(0, -13)
+
+[node name="Weapon" parent="WeaponPivot" index="0" instance=ExtResource("3_7uryo")]

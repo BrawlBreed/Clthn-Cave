@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://l0i3psquothj"]
+
+[ext_resource type="PackedScene" uid="uid://cqomj2xvd8h5o" path="res://Source/Object/Actor/Actor.tscn" id="1_3mms2"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Queen/Bullet.gd" id="2_msh1o"]
+[ext_resource type="Script" path="res://Source/System/Resource/Hitbox.gd" id="3_g1emr"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qgyr2"]
+radius = 2.99999
+height = 24.0
+
+[node name="Bullet" instance=ExtResource("1_3mms2")]
+collision_layer = 0
+script = ExtResource("2_msh1o")
+
+[node name="Body" type="Polygon2D" parent="AnimationBody" index="1"]
+polygon = PackedVector2Array(-9, -1, -12, -3, -11, 0, -12, 3, -9, 1, 7, 1, 6, 3, 12, 0, 6, -3, 7, -1)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/Body" index="0"]
+show_behind_parent = true
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-9, -2, 6, -2, 5, -4, 6, -4, 12, -1, 13, 0, 12, 1, 6, 4, 5, 4, 6, 2, -9, 2, -12, 4, -13, 4, -13, 3, -12, 0, -13, -3, -13, -4, -12, -4)
+
+[node name="Hitbox" type="Area2D" parent="AnimationBody" index="2"]
+script = ExtResource("3_g1emr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimationBody/Hitbox" index="0"]
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_qgyr2")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
+visible = false
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_qgyr2")
+
+[connection signal="attacked" from="AnimationBody/Hitbox" to="." method="_on_hitbox_attacked"]

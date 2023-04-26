@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=3 uid="uid://bqv3h6dw251dk"]
+
+[ext_resource type="PackedScene" uid="uid://dfgqgefbfdfot" path="res://Source/Object/Fighter/Fighter.tscn" id="1_8gsyh"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Rook/Rock.gd" id="2_or258"]
+[ext_resource type="Shader" path="res://Assets/Shader/FillTexture.gdshader" id="3_fvkr3"]
+[ext_resource type="Texture2D" uid="uid://43fovtrm4v8" path="res://Assets/Object/Pieces/Rook.png" id="4_hi6q7"]
+[ext_resource type="PackedScene" path="res://Source/Object/Fighter/Rook/Weapon.tscn" id="5_k2nqf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wlhgf"]
+resource_local_to_scene = true
+shader = ExtResource("3_fvkr3")
+shader_parameter/fill_percent = null
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/alpha = 1.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pcl4s"]
+radius = 6.0
+height = 24.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4xnxr"]
+radius = 4.0
+height = 18.0
+
+[node name="Fighter" instance=ExtResource("1_8gsyh")]
+script = ExtResource("2_or258")
+start_max_health = 12
+movement_speed = 80.0
+
+[node name="AnimationBody" parent="." index="0"]
+material = SubResource("ShaderMaterial_wlhgf")
+
+[node name="Main" parent="AnimationBody" index="0"]
+texture = ExtResource("4_hi6q7")
+offset = Vector2(0, -16)
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(0, -12)
+shape = SubResource("CapsuleShape2D_pcl4s")
+debug_color = Color(0.243137, 0.627451, 0.294118, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+position = Vector2(0, -4)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_4xnxr")
+
+[node name="WeaponPivot" parent="." index="3"]
+position = Vector2(0, -13)
+
+[node name="Weapon" parent="WeaponPivot" index="0" instance=ExtResource("5_k2nqf")]

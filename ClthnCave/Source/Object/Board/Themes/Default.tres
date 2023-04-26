@@ -1,0 +1,32 @@
+[gd_resource type="Resource" load_steps=10 format=3 uid="uid://cuceq2ybc284c"]
+
+[ext_resource type="Texture2D" uid="uid://c6rnd5oue7i65" path="res://Assets/Object/World/Board.png" id="1_os36t"]
+[ext_resource type="Texture2D" uid="uid://b8rst8v3uv0ss" path="res://Assets/Object/Pieces/Block.png" id="2_din3m"]
+[ext_resource type="Texture2D" uid="uid://b6erflk0lhs33" path="res://Assets/Object/Pieces/Bishop.png" id="2_tg1v8"]
+[ext_resource type="Texture2D" uid="uid://couq5sw85nhgn" path="res://Assets/Object/Pieces/King.png" id="3_3ddn3"]
+[ext_resource type="Script" path="res://Source/Object/Board/PieceTheme.cs" id="3_io2kx"]
+[ext_resource type="Texture2D" uid="uid://dmu8j8w4pl2dh" path="res://Assets/Object/Pieces/Knight.png" id="4_dptg3"]
+[ext_resource type="Texture2D" uid="uid://ctuphjlu5dy2s" path="res://Assets/Object/Pieces/Pawn.png" id="5_tgvvt"]
+[ext_resource type="Texture2D" uid="uid://cr6kfpm2my6aj" path="res://Assets/Object/Pieces/Queen.png" id="6_8ysay"]
+[ext_resource type="Texture2D" uid="uid://43fovtrm4v8" path="res://Assets/Object/Pieces/Rook.png" id="7_orjlv"]
+
+[resource]
+script = ExtResource("3_io2kx")
+boardSprite = ExtResource("1_os36t")
+colorLastMove = Color(0.839216, 0.831373, 0.172549, 0.666667)
+colorValidMove = Color(0.803922, 0.0352941, 0.0352941, 0.666667)
+colorPieceWarning = Color(0.803922, 0.0352941, 0.0352941, 0.666667)
+pawnSprite = ExtResource("5_tgvvt")
+pawnYOffset = 22.0
+rookSprite = ExtResource("7_orjlv")
+rookYOffset = 22.0
+bishopSprite = ExtResource("2_tg1v8")
+bishopYOffset = 22.0
+knightSprite = ExtResource("4_dptg3")
+knightYOffset = 22.0
+queenSprite = ExtResource("6_8ysay")
+queenYOffset = 30.0
+kingSprite = ExtResource("3_3ddn3")
+kingYOffset = 30.0
+blockSprite = ExtResource("2_din3m")
+blockYOffset = 21.0

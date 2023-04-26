@@ -1,0 +1,94 @@
+[gd_scene load_steps=13 format=3 uid="uid://csin01xy02h8t"]
+
+[ext_resource type="PackedScene" uid="uid://dfgqgefbfdfot" path="res://Source/Object/Fighter/Fighter.tscn" id="1_ygpl0"]
+[ext_resource type="Shader" path="res://Assets/Shader/FillTexture.gdshader" id="2_b1s42"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/King/King.gd" id="2_f6x4t"]
+[ext_resource type="Script" path="res://Source/System/Resource/Hitbox.gd" id="3_5y06a"]
+[ext_resource type="PackedScene" uid="uid://b7rs2swdisqs3" path="res://Source/Object/Fighter/King/Weapon.tscn" id="4_pbcos"]
+[ext_resource type="Texture2D" uid="uid://43fovtrm4v8" path="res://Assets/Object/Pieces/Rook.png" id="4_r85hv"]
+[ext_resource type="Texture2D" uid="uid://couq5sw85nhgn" path="res://Assets/Object/Pieces/King.png" id="5_7mj2g"]
+
+[sub_resource type="GDScript" id="GDScript_hx8uy"]
+script/source = "extends Node2D
+
+
+func _draw() -> void:
+	var arc_color: = Color.WHITE;
+	if (get_parent().is_black == true):
+		arc_color = Color(\"#3a4466\");
+	arc_color.a = get_parent().damage_circle_alpha;
+	
+	draw_circle(Vector2.ZERO, get_parent().damage_circle_radius, Color(arc_color.r, arc_color.g, arc_color.b, arc_color.a * 0.25));
+	draw_arc(Vector2.ZERO, get_parent().damage_circle_radius, 0.0, TAU, 24, arc_color, 1, true);
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b56kq"]
+radius = 64.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmggt"]
+resource_local_to_scene = true
+shader = ExtResource("2_b1s42")
+shader_parameter/fill_percent = null
+shader_parameter/fill_color = Color(1, 1, 1, 1)
+shader_parameter/alpha = 1.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_obkm7"]
+radius = 6.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_4xnxr"]
+radius = 4.0
+height = 18.0
+
+[node name="Fighter" instance=ExtResource("1_ygpl0")]
+script = ExtResource("2_f6x4t")
+king_movement_speed = 128.0
+rock_movement_speed = 80.0
+start_max_health = 10
+
+[node name="Circle" type="Node2D" parent="." index="0"]
+z_index = -1
+position = Vector2(0, -8)
+script = SubResource("GDScript_hx8uy")
+
+[node name="Hitbox" type="Area2D" parent="." index="1" node_paths=PackedStringArray("user")]
+position = Vector2(0, -8)
+script = ExtResource("3_5y06a")
+clear_time = 0.5
+user = NodePath("..")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]
+rotation = 1.57079
+shape = SubResource("CircleShape2D_b56kq")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[node name="AnimationBody" parent="." index="2"]
+material = SubResource("ShaderMaterial_pmggt")
+
+[node name="Main" parent="AnimationBody" index="0"]
+texture = ExtResource("5_7mj2g")
+offset = Vector2(0, -24)
+vframes = 2
+
+[node name="Protection" type="Sprite2D" parent="AnimationBody" index="1"]
+visible = false
+use_parent_material = true
+texture = ExtResource("4_r85hv")
+offset = Vector2(0, -16)
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(0, -15)
+shape = SubResource("CapsuleShape2D_obkm7")
+debug_color = Color(0.243137, 0.627451, 0.294118, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="4"]
+position = Vector2(0, -4)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_4xnxr")
+
+[node name="WeaponPivot" parent="." index="5"]
+position = Vector2(0, -8)
+
+[node name="Weapon" parent="WeaponPivot" index="0" instance=ExtResource("4_pbcos")]
+
+[connection signal="update_hurtbox_data" from="Hurtbox" to="." method="_on_hurtbox_update_hurtbox_data"]

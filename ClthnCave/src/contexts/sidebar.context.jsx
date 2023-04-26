@@ -9,22 +9,23 @@ export const SidebarContext = createContext({
 })
 
 const setFilteredItems = (input, filteredItems) => {
-    const filtered = Object.keys(filteredItems).map((key) => {
-        return filteredItems[key].filter((item) => {
-            return item.name.toLowerCase().includes(input)
-        })
-    })
-    const result = filtered.filter((item, i, arr) => {
-        return item.length > 0
+    // const result = filteredItems.map((item) => { return { ...item.products, categoryTitle: item.category.title } }).flat()
+    //.filter((item) => item.title.toLowerCase().includes(input))
+    const result = filteredItems.map((item) => {
+        const { products, category } = item
+        const result = products.map((item) => {
+            return { ...item, categoryTitle: category.title }
+        }).filter((item) => item.title.toLowerCase().includes(input))
+
+        return result
     })
 
-
-    return [result.flat()]
+    return result.flat(2)
 }
 
 
 const INITIAL_STATE = {
-    isSidebarOpen: 0,
+    isSidebarOpen: 1,
     searchBox: '',
     filteredItems: [],
     loading: false
@@ -59,16 +60,21 @@ export const SidebarProvider = ({ children }) => {
     const { categoriesMap } = useContext(CategoriesContext)
 
     const onChangeHandler = (e) => {
-        dispatch({ type: types.searchBoxFilter, payload: e.target.value })
+        dispatch({ type: types.searchBoxFilter, payload: e.target.value.toLowerCase() })
     }
 
     useEffect(() => {
-        dispatch({ type: types.setMap, payload: categoriesMap })
+        if (categoriesMap.length) {
+            const products = categoriesMap.map((item) => item)
+            dispatch({ type: types.setMap, payload: products })
+        }
     }, [categoriesMap])
 
     useEffect(() => {
-        const items = setFilteredItems(sidebarState.searchBox, categoriesMap)
-        dispatch({ type: types.setFilteredItems, payload: items })
+        if (categoriesMap.length) {
+            const items = setFilteredItems(sidebarState.searchBox, categoriesMap)
+            dispatch({ type: types.setFilteredItems, payload: items })
+        }
     }, [sidebarState.searchBox])
 
     const setIsSidebarOpen = () => {

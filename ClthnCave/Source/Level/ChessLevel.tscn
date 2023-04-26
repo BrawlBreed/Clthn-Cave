@@ -1,0 +1,138 @@
+[gd_scene load_steps=4 format=3 uid="uid://bl2k87d8f1xnc"]
+
+[ext_resource type="Texture2D" uid="uid://c6rnd5oue7i65" path="res://Assets/Object/World/Board.png" id="1_52p2i"]
+[ext_resource type="Script" path="res://Source/Level/ChessLevel.gd" id="1_boudx"]
+[ext_resource type="PackedScene" uid="uid://cmpyncr8xb1p6" path="res://Source/Object/Board/Board.tscn" id="2_0c4vj"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_boudx")
+
+[node name="Background" type="Node2D" parent="."]
+z_index = -10
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.129412, 0.109804, 0.137255, 1)
+
+[node name="Board" type="Sprite2D" parent="Background"]
+position = Vector2(152, 8)
+scale = Vector2(1.75, 1.75)
+texture = ExtResource("1_52p2i")
+centered = false
+
+[node name="Level" parent="." instance=ExtResource("2_0c4vj")]
+
+[node name="Buttons" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ChooseBackground" type="ColorRect" parent="Buttons"]
+visible = false
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0, 0, 0, 0.5)
+
+[node name="PlayerPieces" type="Control" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Button1" type="Button" parent="Buttons/PlayerPieces"]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+icon_alignment = 1
+
+[node name="Button2" type="Button" parent="Buttons/PlayerPieces"]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+icon_alignment = 1
+
+[node name="Button3" type="Button" parent="Buttons/PlayerPieces"]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+icon_alignment = 1
+
+[node name="EnemyPieces" type="Control" parent="Buttons"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Button1" type="Button" parent="Buttons/EnemyPieces"]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+icon_alignment = 1
+
+[node name="Button2" type="Button" parent="Buttons/EnemyPieces"]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+icon_alignment = 1
+
+[node name="Button3" type="Button" parent="Buttons/EnemyPieces"]
+visible = false
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 32.0
+focus_mode = 0
+icon_alignment = 1
+
+[node name="ReviveButton" type="Button" parent="Buttons"]
+visible = false
+layout_mode = 0
+offset_left = 32.0
+offset_top = 160.0
+offset_right = 136.0
+offset_bottom = 192.0
+text = "Revive"
+
+[node name="KillButton" type="Button" parent="Buttons"]
+visible = false
+layout_mode = 0
+offset_left = 504.0
+offset_top = 160.0
+offset_right = 608.0
+offset_bottom = 192.0
+text = "Kill"
+
+[node name="Battle" type="Node2D" parent="."]
+
+[connection signal="PiecesStored" from="Level" to="." method="store_pieces"]
+[connection signal="button_up" from="Buttons/ReviveButton" to="." method="_on_revive_button_button_up"]
+[connection signal="button_up" from="Buttons/KillButton" to="." method="_on_kill_button_button_up"]
+
+[editable path="Level"]

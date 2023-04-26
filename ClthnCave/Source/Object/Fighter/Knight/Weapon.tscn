@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://ccxs8qcj4upi2"]
+
+[ext_resource type="PackedScene" uid="uid://broemaauc26lm" path="res://Source/Object/Fighter/Weapon/Weapon.tscn" id="1_i4qh6"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Knight/Weapon.gd" id="2_0opx3"]
+[ext_resource type="Script" path="res://Source/System/Resource/Hitbox.gd" id="3_arnj2"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w7b1b"]
+radius = 3.0
+height = 38.0
+
+[node name="Weapon" instance=ExtResource("1_i4qh6")]
+script = ExtResource("2_0opx3")
+
+[node name="Body" type="Polygon2D" parent="AnimationBody" index="1"]
+polygon = PackedVector2Array(-4, -3, -2, -1, 2, -1, 2, -3, 3, -3, 36, 0, 3, 3, 2, 3, 2, 1, -2, 1, -4, 3, -6, 3, -6, -3)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/Body" index="0"]
+show_behind_parent = true
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-3, -4, -1, -2, 1, -2, 1, -4, 4, -4, 34, -1, 39, 0, 34, 1, 4, 4, 1, 4, 1, 2, -1, 2, -3, 4, -7, 4, -7, -4)
+
+[node name="Hitbox" type="Area2D" parent="AnimationBody" index="2"]
+script = ExtResource("3_arnj2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimationBody/Hitbox" index="0"]
+position = Vector2(19, 0)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_w7b1b")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[connection signal="main_attack_used" from="." to="." method="on_main_attack_used"]

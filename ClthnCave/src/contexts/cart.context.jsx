@@ -2,47 +2,48 @@ import { createContext, useState, useEffect, useReducer } from 'react';
 
 const addCartItem = (cartItems, productToAdd) => {
   const existingCartItem = cartItems.find(
-    (cartItem) => cartItem.id === productToAdd.id
+    (cartItem) => cartItem.title === productToAdd.title
   );
 
   if (existingCartItem) {
     return cartItems.map((cartItem) =>
-      cartItem.id === productToAdd.id
-        ? { ...cartItem, quantity: cartItem.quantity + 1 }
+      cartItem.title === productToAdd.title
+        ? { ...cartItem, quantity: cartItem.quantity + productToAdd.quantity }
         : cartItem
     );
   }
 
-  return [...cartItems, { ...productToAdd, quantity: 1 }];
+  return [...cartItems, { ...productToAdd, quantity: productToAdd.quantity }];
 };
 
 const removeCartItem = (cartItems, cartItemToRemove) => {
   // find the cart item to remove
   const existingCartItem = cartItems.find(
-    (cartItem) => cartItem.id === cartItemToRemove.id
+    (cartItem) => cartItem.title === cartItemToRemove.title
   );
 
   // check if quantity is equal to 1, if it is remove that item from the cart
   if (existingCartItem.quantity === 1) {
-    return cartItems.filter((cartItem) => cartItem.id !== cartItemToRemove.id);
+    return cartItems.filter((cartItem) => cartItem.title !== cartItemToRemove.title);
   }
 
   // return back cartitems with matching cart item with reduced quantity
   return cartItems.map((cartItem) =>
-    cartItem.id === cartItemToRemove.id
+    cartItem.title === cartItemToRemove.title
       ? { ...cartItem, quantity: cartItem.quantity - 1 }
       : cartItem
   );
 };
 
 const clearCartItem = (cartItems, cartItemToClear) =>
-  cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
+  cartItems.filter((cartItem) => cartItem.title !== cartItemToClear.title);
 
 export const CartContext = createContext({
   setIsCartOpen: () => { },
   addItemToCart: () => { },
   removeItemFromCart: () => { },
   clearItemFromCart: () => { },
+  clearCart: () => { },
   cartState: {}
 });
 
@@ -59,7 +60,8 @@ const types = {
   clearCartItem: 'clearCartItem',
   cartCount: 'cartCount',
   cartTotal: 'cartTotal',
-  openCloseCart: 'openCloseCart'
+  openCloseCart: 'openCloseCart',
+  clearCart: 'clearCart'
 }
 
 const reducer = (state, action) => {
@@ -78,6 +80,8 @@ const reducer = (state, action) => {
       return { ...state, cartTotal: payload }
     case types.openCloseCart:
       return { ...state, isCartOpen: !state.isCartOpen }
+    case types.clearCart:
+      return INITIAL_STATE
     default:
       console.log('Unknown error!')
   }
@@ -119,11 +123,16 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: types.openCloseCart })
   }
 
+  const clearCart = () => {
+    dispatch({ type: types.clearCart })
+  }
+
   const value = {
     addItemToCart,
     removeItemToCart,
     clearItemFromCart,
     setIsCartOpen,
+    clearCart,
     cartState: cartState
   };
 

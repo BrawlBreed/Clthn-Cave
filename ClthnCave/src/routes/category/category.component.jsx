@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, Fragment } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Outlet } from 'react-router-dom';
 
 import ProductCard from '../../components/product-card/product-card.component';
 
@@ -16,17 +16,25 @@ const Category = () => {
   const { isSidebarOpen } = sidebarState
 
   useEffect(() => {
-    setProducts(categoriesMap[category]);
+
+    if (categoriesMap.length) {
+      const products = []
+      categoriesMap.map((item) => {
+        item.category.title === category &&
+          products.push(item.products)
+      })
+      setProducts(products.flat());
+    }
   }, [category, categoriesMap]);
 
   return (
     <Fragment>
       <h2 className='category-title'>{category.toUpperCase()}</h2>
       <div className='category-container' style={{ left: isSidebarOpen && '20%', gridTemplateColumns: isSidebarOpen && `repeat(3, 1fr)` }}>
-        {products &&
+        {products ?
           products.map((product) => (
             <ProductCard key={product.id} product={product} />
-          ))}
+          )) : <></>}
       </div>
     </Fragment>
   );

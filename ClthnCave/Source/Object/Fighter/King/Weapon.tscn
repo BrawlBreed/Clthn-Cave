@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://b7rs2swdisqs3"]
+
+[ext_resource type="PackedScene" uid="uid://broemaauc26lm" path="res://Source/Object/Fighter/Weapon/Weapon.tscn" id="1_jvdcm"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/King/Weapon.gd" id="2_2y7pg"]
+[ext_resource type="Script" path="res://Source/System/Resource/Hitbox.gd" id="3_0y5ty"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w7b1b"]
+radius = 2.0
+height = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_odplk"]
+radius = 17.0
+
+[node name="Weapon" instance=ExtResource("1_jvdcm")]
+script = ExtResource("2_2y7pg")
+main_body_offset = 16.0
+
+[node name="Body" type="Polygon2D" parent="AnimationBody" index="1"]
+polygon = PackedVector2Array(-4, -2, 20, -2, 20, -3, 21, -4, 27, -4, 28, -3, 28, 3, 27, 4, 21, 4, 20, 3, 20, 2, -4, 2)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/Body" index="0"]
+show_behind_parent = true
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(29, -4, 29, 4, 28, 5, 20, 5, 19, 4, 19, 3, -5, 3, -5, -3, 19, -3, 19, -4, 20, -5, 28, -5)
+
+[node name="BladeBody" type="Polygon2D" parent="AnimationBody/Body" index="1"]
+position = Vector2(24, 0)
+rotation = 3.14159
+polygon = PackedVector2Array(3, -4, 2, -5, 4, -6, 2, -7, 3, -8, 0, -16, -3, -8, -2, -7, -4, -6, -2, -5, -3, -4, -3, 4, -2, 5, -4, 6, -2, 7, -3, 8, 0, 16, 3, 8, 2, 7, 4, 6, 2, 5, 3, 4)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/Body/BladeBody" index="0"]
+show_behind_parent = true
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(3, -5, 3, 5, 5, 6, 3, 7, 4, 8, 0, 18, -4, 8, -3, 7, -5, 6, -3, 5, -3, -5, -5, -6, -3, -7, -4, -8, 0, -18, 4, -8, 3, -7, 5, -6)
+
+[node name="Hitbox" type="Area2D" parent="AnimationBody" index="2"]
+script = ExtResource("3_0y5ty")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimationBody/Hitbox" index="0"]
+position = Vector2(12, 0)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_w7b1b")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="AnimationBody/Hitbox" index="1"]
+position = Vector2(24, 0)
+shape = SubResource("CircleShape2D_odplk")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[node name="BulletSpawn" type="Marker2D" parent="AnimationBody" index="3"]
+position = Vector2(13, 0)
+
+[connection signal="main_attack_used" from="." to="." method="on_main_attack_used"]
+[connection signal="other_attack_used" from="." to="." method="on_other_attack_used"]

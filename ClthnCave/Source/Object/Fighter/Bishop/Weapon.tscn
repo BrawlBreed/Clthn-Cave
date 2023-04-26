@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dibljaqj0oy8c"]
+
+[ext_resource type="PackedScene" uid="uid://broemaauc26lm" path="res://Source/Object/Fighter/Weapon/Weapon.tscn" id="1_xds1d"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Bishop/Weapon.gd" id="2_j8xjd"]
+
+[node name="Weapon" instance=ExtResource("1_xds1d")]
+script = ExtResource("2_j8xjd")
+
+[node name="Body" type="Polygon2D" parent="AnimationBody" index="1"]
+polygon = PackedVector2Array(-3, -2, 12, -2, 16, -4, 21, 0, 16, 4, 12, 2, -3, 2)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/Body" index="0"]
+show_behind_parent = true
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(11, -3, 16, -5, 23, 0, 16, 5, 11, 3, -4, 3, -4, -3)
+
+[node name="BulletSpawn" type="Marker2D" parent="AnimationBody" index="2"]
+position = Vector2(27, 0)
+
+[connection signal="main_attack_used" from="." to="." method="on_main_attack_used"]

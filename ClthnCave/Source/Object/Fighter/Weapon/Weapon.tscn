@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://broemaauc26lm"]
+
+[ext_resource type="Script" path="res://Source/Object/Fighter/Weapon/Weapon.gd" id="1_exeug"]
+
+[node name="Weapon" type="Node2D"]
+script = ExtResource("1_exeug")
+
+[node name="AnimationBody" type="Node2D" parent="."]
+
+[node name="Main" type="Sprite2D" parent="AnimationBody"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]

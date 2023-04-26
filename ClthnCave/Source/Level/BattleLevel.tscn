@@ -1,0 +1,121 @@
+[gd_scene load_steps=15 format=3 uid="uid://ceirigx7i63v0"]
+
+[ext_resource type="Script" path="res://Source/Level/BattleLevel.gd" id="1_d0drw"]
+[ext_resource type="Texture2D" uid="uid://c6rnd5oue7i65" path="res://Assets/Object/World/Board.png" id="2_qbisk"]
+[ext_resource type="Texture2D" uid="uid://gg127x08sstt" path="res://Assets/Object/UserInterface/PlayerHealthBackground.png" id="3_vcdvh"]
+[ext_resource type="Texture2D" uid="uid://dk0gh7v68qc0c" path="res://Assets/Object/UserInterface/PlayerHealthContainer.png" id="4_couny"]
+[ext_resource type="Texture2D" uid="uid://daicp6tmqncmc" path="res://Assets/Object/UserInterface/PlayerHealthFilled.png" id="5_yabys"]
+[ext_resource type="Texture2D" uid="uid://bu3fa1dqq2xc4" path="res://Assets/Object/UserInterface/PlayerAttackBackground.png" id="6_h46wo"]
+[ext_resource type="Texture2D" uid="uid://b4lyysfhkqlln" path="res://Assets/Object/UserInterface/PlayerAttackContainer.png" id="7_sx05x"]
+[ext_resource type="Texture2D" uid="uid://xvrtg1tjvifb" path="res://Assets/Object/UserInterface/PlayerAttackFilled.png" id="8_4letj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l50oi"]
+size = Vector2(336, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_to1ov"]
+size = Vector2(336, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8e2o2"]
+size = Vector2(208, 472)
+
+[sub_resource type="Animation" id="Animation_l164r"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_7d6jy"]
+resource_name = "new_animation"
+length = 4.0
+loop_mode = 2
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_knsv1"]
+_data = {
+"RESET": SubResource("Animation_l164r"),
+"new_animation": SubResource("Animation_7d6jy")
+}
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_d0drw")
+
+[node name="Background" type="Node2D" parent="."]
+z_index = -10
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.129412, 0.109804, 0.137255, 1)
+
+[node name="Board" type="Sprite2D" parent="Background"]
+position = Vector2(152, 8)
+scale = Vector2(1.75, 1.75)
+texture = ExtResource("2_qbisk")
+centered = false
+
+[node name="Border" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Border"]
+position = Vector2(320, -24)
+shape = SubResource("RectangleShape2D_l50oi")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Border"]
+position = Vector2(320, 380)
+shape = SubResource("RectangleShape2D_to1ov")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Border"]
+position = Vector2(48, 180)
+shape = SubResource("RectangleShape2D_8e2o2")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Border"]
+position = Vector2(592, 180)
+shape = SubResource("RectangleShape2D_8e2o2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "new_animation"
+libraries = {
+"": SubResource("AnimationLibrary_knsv1")
+}
+
+[node name="Objects" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Fighter1Spawn" type="Marker2D" parent="."]
+position = Vector2(320, 272)
+
+[node name="Fighter2Spawn" type="Marker2D" parent="."]
+position = Vector2(320, 88)
+
+[node name="Bullets" type="Node2D" parent="."]
+unique_name_in_owner = true
+z_index = 2
+y_sort_enabled = true
+
+[node name="UserInterface" type="CanvasLayer" parent="."]
+
+[node name="PlayerHealthBar" type="TextureProgressBar" parent="UserInterface"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 144.0
+offset_bottom = 32.0
+step = 0.01
+texture_under = ExtResource("3_vcdvh")
+texture_over = ExtResource("4_couny")
+texture_progress = ExtResource("5_yabys")
+
+[node name="PlayerMainAttackBar" type="TextureProgressBar" parent="UserInterface"]
+offset_left = 17.0
+offset_top = 35.0
+offset_right = 33.0
+offset_bottom = 51.0
+step = 0.01
+texture_under = ExtResource("6_h46wo")
+texture_over = ExtResource("7_sx05x")
+texture_progress = ExtResource("8_4letj")
+
+[node name="PlayerOtherAttackBar" type="TextureProgressBar" parent="UserInterface"]
+offset_left = 38.0
+offset_top = 35.0
+offset_right = 54.0
+offset_bottom = 51.0
+step = 0.01
+texture_under = ExtResource("6_h46wo")
+texture_over = ExtResource("7_sx05x")
+texture_progress = ExtResource("8_4letj")

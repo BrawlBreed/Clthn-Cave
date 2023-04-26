@@ -1,0 +1,76 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" uid="uid://cqomj2xvd8h5o" path="res://Source/Object/Actor/Actor.tscn" id="1_uf0ex"]
+[ext_resource type="Script" path="res://Source/Object/Fighter/Rook/Bullet.gd" id="2_wvnff"]
+[ext_resource type="Script" path="res://Source/System/Resource/Hitbox.gd" id="3_t3a8x"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_exx3x"]
+radius = 13.0
+
+[node name="Bullet" instance=ExtResource("1_uf0ex")]
+collision_layer = 0
+script = ExtResource("2_wvnff")
+
+[node name="Body" type="Polygon2D" parent="AnimationBody" index="1"]
+polygon = PackedVector2Array(-9.90625, -8.875, -8.125, -9.1875, -7.0625, -10.0313, -5.9375, -12.6563, -5.09375, -13.4063, -4, -14, 2, -15, 3.0625, -14.6563, 4, -14, 6, -11, 6.91708, -10.4368, 8, -10, 13, -9, 14.1266, -8.65302, 15, -8, 16, -4, 15.6132, -2.96712, 15, -2, 13.8665, -0.514383, 13, 1, 12.7881, 2.00228, 13, 3, 14.0078, 8.039, 13.9085, 9.16468, 13, 10, 8, 12, 6.80729, 12.3168, 6.01132, 13.066, 5, 15, 4.23208, 15.6412, 3, 16, -4, 15, -4.58511, 14.5998, -5, 14, -6, 12, -6.63065, 10.6312, -8, 10, -10, 10, -11.0938, 9.59375, -12, 9, -13, 7, -12.7813, 6.03125, -12.3649, 5.36492, -11, 4, -11.25, 2.9375, -12, 2, -14.7813, 0.8125, -15.5938, -0.28125, -16, -2, -17, -4, -16.6875, -5.03125, -16, -6, -12.0938, -8.09375)
+
+[node name="Outline" type="Polygon2D" parent="AnimationBody/Body" index="0"]
+show_behind_parent = true
+scale = Vector2(1.1, 1.1)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-9.90625, -8.875, -8.125, -9.1875, -7.0625, -10.0313, -5.9375, -12.6563, -5.09375, -13.4063, -4, -14, 2, -15, 3.0625, -14.6563, 4, -14, 6, -11, 6.91708, -10.4368, 8, -10, 13, -9, 14.1266, -8.65302, 15, -8, 16, -4, 15.6132, -2.96712, 15, -2, 13.8665, -0.514383, 13, 1, 12.7881, 2.00228, 13, 3, 14.0078, 8.039, 13.9085, 9.16468, 13, 10, 8, 12, 6.80729, 12.3168, 6.01132, 13.066, 5, 15, 4.23208, 15.6412, 3, 16, -4, 15, -4.58511, 14.5998, -5, 14, -6, 12, -6.63065, 10.6312, -8, 10, -10, 10, -11.0938, 9.59375, -12, 9, -13, 7, -12.7813, 6.03125, -12.3649, 5.36492, -11.2247, 3.9286, -11.4877, 2.89721, -12.303, 2.07209, -14.7813, 0.8125, -15.5938, -0.28125, -16, -2, -17, -4, -16.6875, -5.03125, -16, -6, -12.0938, -8.09375)
+
+[node name="Outline2" type="Polygon2D" parent="AnimationBody/Body" index="1"]
+scale = Vector2(1.1, 1.1)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-6.36364, -10, -6.36364, -8.18182, -5.45455, -7.27273, -4.09699, -6.46087, -4.74126, -6.2819, -5.45455, -6.36364, -7.27273, -7.27273, -8.10635, -7.9563, -9.09091, -8.18182)
+
+[node name="Outline7" type="Polygon2D" parent="AnimationBody/Body" index="2"]
+position = Vector2(-0.44545, -0.278404)
+rotation = 1.30256
+scale = Vector2(1.1, 1.1)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-6.36364, -10, -6.55376, -8.20394, -5.70203, -6.73134, -5.2011, -6.48845, -4.36094, -6.36169, -3.52124, -6.00589, -2.89314, -5.56241, -4.11005, -5.8344, -4.65433, -5.90067, -5.10731, -5.78968, -4.86158, -4.23071, -5.57589, -5.50133, -7.27273, -7.27273, -8.10635, -7.9563, -9.09091, -8.18182)
+
+[node name="Outline3" type="Polygon2D" parent="AnimationBody/Body" index="3"]
+position = Vector2(-2.61701, -5.73516)
+rotation = -1.62021
+scale = Vector2(1.1, 1.1)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-6.36364, -10, -6.36364, -8.18182, -5.68837, -7.4991, -4.52687, -6.69911, -6.11859, -6.85195, -7.27273, -7.27273, -8.42606, -7.99723, -8.88075, -8.60825)
+
+[node name="Outline4" type="Polygon2D" parent="AnimationBody/Body" index="4"]
+position = Vector2(2.02322, 0.779308)
+rotation = -4.23098
+scale = Vector2(-1.1, 1.1)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-6.36364, -10, -6.36364, -8.18182, -5.68837, -7.4991, -4.23324, -6.49073, -6.11859, -6.85195, -7.27273, -7.27273, -8.42606, -7.99723, -8.88075, -8.60825)
+
+[node name="Outline5" type="Polygon2D" parent="AnimationBody/Body" index="5"]
+position = Vector2(0.318378, -0.837937)
+rotation = -3.88265
+scale = Vector2(1.1, 1.1)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-6.36364, -10, -6.36364, -8.18182, -5.68837, -7.4991, -5.22269, -6.8503, -6.11859, -6.85195, -7.27273, -7.27273, -8.42606, -7.99723, -8.88075, -8.60825)
+
+[node name="Outline6" type="Polygon2D" parent="AnimationBody/Body" index="6"]
+position = Vector2(0.02108, 0.425593)
+rotation = -1.83259
+scale = Vector2(1.1, 1.1)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-6.36364, -10, -6.36364, -8.18182, -5.68837, -7.4991, -5.22269, -6.8503, -6.11859, -6.85195, -6.29224, -5.85604, -6.76826, -5.16974, -7.34687, -5.18598, -7.02491, -5.76596, -6.92085, -6.44371, -7.27273, -7.27273, -8.42606, -7.99723, -8.88075, -8.60825)
+
+[node name="Hitbox" type="Area2D" parent="AnimationBody" index="2"]
+script = ExtResource("3_t3a8x")
+attack_damage = 3
+clear_time = 2.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimationBody/Hitbox" index="0"]
+rotation = 1.57079
+shape = SubResource("CircleShape2D_exx3x")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
+visible = false
+rotation = 1.57079
+shape = SubResource("CircleShape2D_exx3x")

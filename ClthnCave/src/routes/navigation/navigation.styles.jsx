@@ -30,8 +30,11 @@ export const NavLink = styled(Link)`
   cursor: pointer;
   transition: 0.3s;
   font-size: 20px;
+  border-radius: 150%;
+  margin: 0 10px;
   
   &:hover {
-    color:#71bdde;
+    color:white;
+    background-color: black;
   }
 `;

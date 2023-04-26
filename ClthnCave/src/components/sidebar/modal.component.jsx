@@ -1,32 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { CartContext } from '../../contexts/cart.context';
+import React, { useContext, useEffect, useState } from 'react';
 import AOS from 'aos'
 import 'aos/dist/aos.css';
-import './sidebar.styles.scss'
+import './sidebar.styles.scss';
+import { useNavigate } from 'react-router-dom';
 
 export const Modal = ({ item }) => {
-    const { addItemToCart } = useContext(CartContext);
-    const { id, name, imageUrl } = item
+    const { id, title, imageUrls } = item
+    const navigate = useNavigate()
 
     useEffect(() => {
         AOS.init();
-
     }, [])
 
-
     return (
-        <div className='modal-container' data-aos='fade-down'>
+        <div className='modal-container' data-aos='fade-down'
+            onClick={() => {
+                navigate(`/shop/${item.categoryTitle}`)
+            }}
+        >
             <div
                 className='background-image'
                 style={{
-                    backgroundImage: `url(${imageUrl})`,
+                    backgroundImage: `url(${imageUrls})`,
                 }}
                 key={id}
             />
-            <h3>{name}</h3>
-            <button
-                onClick={() => addItemToCart(item)}
-            >Add to cart</button>
+            <h3>{title}</h3>
         </div>
     )
 }

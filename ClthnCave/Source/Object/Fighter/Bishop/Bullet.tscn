@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://cpu1152v7vil0"]
+
+[ext_resource type="Script" path="res://Source/Object/Fighter/Bishop/Bullet.gd" id="1_hs0d2"]
+[ext_resource type="PackedScene" uid="uid://cqomj2xvd8h5o" path="res://Source/Object/Actor/Actor.tscn" id="1_t5io6"]
+[ext_resource type="Script" path="res://Source/System/Resource/Hitbox.gd" id="3_sg4uy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_exx3x"]
+radius = 8.0
+
+[node name="Bullet" instance=ExtResource("1_t5io6")]
+collision_layer = 0
+script = ExtResource("1_hs0d2")
+
+[node name="Hitbox" type="Area2D" parent="AnimationBody" index="1"]
+script = ExtResource("3_sg4uy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimationBody/Hitbox" index="0"]
+rotation = 1.57079
+shape = SubResource("CircleShape2D_exx3x")
+debug_color = Color(0.827451, 0.372549, 0.364706, 0.419608)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="1"]
+rotation = 1.57079
+shape = SubResource("CircleShape2D_exx3x")
+
+[connection signal="attacked" from="AnimationBody/Hitbox" to="." method="_on_hitbox_attacked"]
