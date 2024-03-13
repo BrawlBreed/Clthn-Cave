@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 import CartIcon from '../../components/cart-icon/cart-icon.component';
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
@@ -15,12 +15,14 @@ import Footer from '../../components/footer/footer.component';
 import { AiFillShop } from 'react-icons/ai'
 import { Loader } from '../../utils/alerts/Loader'
 import { CategoriesContext } from '../../contexts/categories.context';
+import Logo from '../../assets/clthncave.png'
 
 import {
   NavigationContainer,
   LogoContainer,
   NavLinks,
   NavLink,
+  AuthLink
 } from './navigation.styles';
 
 const Navigation = ({ sidebar }) => {
@@ -32,19 +34,20 @@ const Navigation = ({ sidebar }) => {
   return (
     <Fragment>
       <NavigationContainer>
-        <LogoContainer to='/'>
-          {/* <img src='../../assets/clthncave.png' alt='logo' /> */}
-        </LogoContainer>
+        <Link to='/'>
+          <img src={Logo} style={{ width: '100px', height: 'auto' }} />
+        </Link>
         <NavLinks>
           <NavLink to='/shop'><AiFillShop style={{ width: '40px', height: 'auto' }} /></NavLink>
-          {/* {currentUser ? (
-            <NavLink as='span' onClick={signOutUser}>
-              SIGN OUT
-            </NavLink>
-          ) : (
-            <NavLink to='/auth'>SIGN IN</NavLink>
-          )} */}
           <CartIcon />
+          {currentUser ? (
+            <AuthLink as='span' onClick={signOutUser}>
+              SIGN OUT
+            </AuthLink>
+          ) : (
+            <AuthLink to='/auth'>SIGN IN</AuthLink>
+          )}
+
         </NavLinks>
         {isCartOpen && <CartDropdown />}
       </NavigationContainer>

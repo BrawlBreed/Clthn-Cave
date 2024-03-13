@@ -37,3 +37,15 @@ export const NavLink = styled(Link)`
     background-color: black;
   }
 `;
+export const AuthLink = styled(Link)`
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 20px;
+  margin: 0 10px;
+
+  &:hover {
+    color:white;
+    background-color: black;
+  }
+`;

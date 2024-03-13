@@ -4,9 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 
-import { Provider } from 'react-redux';
-import { store } from './store/store';
-
 import { UserProvider } from './contexts/user.context';
 import { CategoriesProvider } from './contexts/categories.context';
 import { CartProvider } from './contexts/cart.context';
@@ -24,7 +21,7 @@ const rootElement = document.getElementById('root');
 render(
   <React.StrictMode>
     <BrowserRouter>
-      <Provider store={store}>
+      <UserProvider>
         <CheckoutProvider>
           <OrdersProvider>
             <AddProvider>
@@ -42,7 +39,7 @@ render(
           </AddProvider>
           </OrdersProvider>
         </CheckoutProvider>
-      </Provider> 
+      </UserProvider> 
     </BrowserRouter>
   </React.StrictMode>,
   rootElement
