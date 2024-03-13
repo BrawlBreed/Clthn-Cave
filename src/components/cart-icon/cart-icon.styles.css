@@ -1,0 +1,36 @@
+.cart-icon-container {
+  width: 45px;
+  height: 45px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 10px;
+  border-radius: 100%;
+  transition: 0.3s;
+  width: 60px;
+  height: 60px;
+}
+.cart-icon-container .shopping-icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+.cart-icon-container .item-count {
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+  bottom: 12px;
+  text-decoration: none;
+  margin-bottom: 3px;
+}
+
+.cart-icon-container:hover {
+  color: white;
+  background-color: black;
+  transition: 0.3s;
+}
+.cart-icon-container:hover .item-count {
+  color: white;
+}/*# sourceMappingURL=cart-icon.styles.css.map */
