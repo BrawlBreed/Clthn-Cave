@@ -13,9 +13,6 @@ import Sidebar from '../../components/sidebar/sidebar.component';
 import Footer from '../../components/footer/footer.component';
 
 import { AiFillShop } from 'react-icons/ai'
-
-import Logo from '../../assets/clthncave.png';
-
 import { Loader } from '../../utils/alerts/Loader'
 import { CategoriesContext } from '../../contexts/categories.context';
 
@@ -36,7 +33,7 @@ const Navigation = ({ sidebar }) => {
     <Fragment>
       <NavigationContainer>
         <LogoContainer to='/'>
-          {/* <img src={Logo} alt='logo' /> */}
+          {/* <img src='../../assets/clthncave.png' alt='logo' /> */}
         </LogoContainer>
         <NavLinks>
           <NavLink to='/shop'><AiFillShop style={{ width: '40px', height: 'auto' }} /></NavLink>

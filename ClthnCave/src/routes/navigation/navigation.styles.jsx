@@ -14,7 +14,6 @@ export const LogoContainer = styled(Link)`
   width: 70px;
   padding: 25px;
   margin-left: -25px;
-  background-color: black;
 `;
 
 export const NavLinks = styled.div`

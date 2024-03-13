@@ -18,9 +18,8 @@ const DirectoryItem = ({ category }) => {
           transition: '2s'
         }}
       />
-      <div className='body'>
-        <h2>{title}</h2>
-        <p>Shop Now</p>
+      <div className='body' style={{ alignItems: 'center' }}>
+        <h2 style={{ paddingBottom: '9%' }}>{title}</h2>
       </div>
     </div>
   );

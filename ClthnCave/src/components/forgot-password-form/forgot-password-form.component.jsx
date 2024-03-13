@@ -40,7 +40,7 @@ export const ForgotPassword = () => {
             setDisable(true)
             setEmailNotification('Verification email sent!')
         }
-        // navigateToOTP()
+        navigateToOTP()
     }
 
     const handleChange = (e) => {
@@ -49,17 +49,13 @@ export const ForgotPassword = () => {
         setFormFields({ ...formFields, [name]: value });
     }
 
-    const navigateToOTP = async () => {
+    const navigateToOTP = async (res) => {
         if (email) {
-            const OTP = Math.floor((Math.random() * 9000 + 1000))
-            setOtp(OTP)
-
             axios
                 .post("http://localhost:5000/send_recovery_email", {
-                    OTP: OTP,
+                    OTP: res,
                     recipient_email: email
                 })
-                .then(() => setPage('otp'))
                 .catch((err) => {
                     console.log(err)
                 })
@@ -101,8 +97,12 @@ export const ForgotPassword = () => {
             const { password } = formFields
             const response = await setNewPassword(auth, obb, password)
             if (response) {
-                const Msg = { msg: 'Success!', success: 'Yes' };
+                const Msg = { msg: 'success', success: 'Yes' };
                 setMsg(Object.values(Msg))
+
+                if (Msg.msg === 'success') {
+                    navigateToOTP(Msg.msg)
+                }
                 window.history.replaceState(null, '', location.pathname);
 
                 setTimeout(() => {
